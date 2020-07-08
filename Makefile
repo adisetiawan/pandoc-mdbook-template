@@ -4,11 +4,12 @@
 
 # Build configuration
 
-BUILD = build
+BUILD = ebook
+MDBOOK_IMAGES = src/chapters/images
 MAKEFILE = Makefile
 OUTPUT_FILENAME = book
 METADATA = metadata.yml
-CHAPTERS = chapters/*.md
+CHAPTERS = src/chapters/*.md
 TOC = --toc --toc-depth=2
 METADATA_ARGS = --metadata-file=$(METADATA)
 IMAGES_FOLDER = images
@@ -45,10 +46,10 @@ DOCX_ARGS =
 
 all:	book
 
-book:	epub html pdf docx
+book:	epub html pdf docx web
 
 clean:
-	rm -r $(BUILD)
+	rm -rf $(BUILD)
 
 ####################################################################################################
 # File builders
@@ -58,13 +59,17 @@ epub:	$(BUILD)/epub/$(OUTPUT_FILENAME).epub
 
 html:	$(BUILD)/html/$(OUTPUT_FILENAME).html
 
-pdf:	$(BUILD)/pdf/$(OUTPUT_FILENAME).pdf
+pdf:    $(BUILD)/pdf/$(OUTPUT_FILENAME).pdf
 
 docx:	$(BUILD)/docx/$(OUTPUT_FILENAME).docx
+
+web:	
+	mdbook build
 
 $(BUILD)/epub/$(OUTPUT_FILENAME).epub:	$(MAKEFILE) $(METADATA) $(CHAPTERS) $(CSS_FILE) $(IMAGES) \
 		$(COVER_IMAGE)
 	mkdir -p $(BUILD)/epub
+	cp -R $(MDBOOK_IMAGES)/ $(IMAGES_FOLDER)/
 	$(PANDOC_COMMAND) $(ARGS) $(EPUB_ARGS) -o $@ $(CHAPTERS)
 	@echo "$@ was built"
 
@@ -75,12 +80,16 @@ $(BUILD)/html/$(OUTPUT_FILENAME).html:	$(MAKEFILE) $(METADATA) $(CHAPTERS) $(CSS
 	cp $(CSS_FILE) $(BUILD)/html/$(CSS_FILE)
 	@echo "$@ was built"
 
-$(BUILD)/pdf/$(OUTPUT_FILENAME).pdf:	$(MAKEFILE) $(METADATA) $(CHAPTERS) $(CSS_FILE) $(IMAGES)
+$(BUILD)/pdf/$(OUTPUT_FILENAME).pdf:
 	mkdir -p $(BUILD)/pdf
+	cp -R $(MDBOOK_IMAGES)/ $(IMAGES_FOLDER)/
 	$(PANDOC_COMMAND) $(ARGS) $(PDF_ARGS) -o $@ $(CHAPTERS)
 	@echo "$@ was built"
 
 $(BUILD)/docx/$(OUTPUT_FILENAME).docx:	$(MAKEFILE) $(METADATA) $(CHAPTERS) $(CSS_FILE) $(IMAGES)
+	
 	mkdir -p $(BUILD)/docx
+	cp -R $(MDBOOK_IMAGES)/ $(IMAGES_FOLDER)/
 	$(PANDOC_COMMAND) $(ARGS) $(DOCX_ARGS) -o $@ $(CHAPTERS)
 	@echo "$@ was built"
+
