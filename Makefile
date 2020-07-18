@@ -37,7 +37,7 @@ PANDOC_COMMAND = pandoc
 
 EPUB_ARGS = --epub-cover-image=$(COVER_IMAGE)
 HTML_ARGS = --standalone --to=html5
-PDF_ARGS = -V geometry:margin=1in -V documentclass=report --pdf-engine=xelatex
+PDF_ARGS = -f markdown -V fontsize=12pt -V geometry:margin=1in -V documentclass=report --pdf-engine=xelatex
 DOCX_ARGS =
 
 ####################################################################################################
