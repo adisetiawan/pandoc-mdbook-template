@@ -8,7 +8,6 @@ This repositoy is a cloned version of this [simple pandoc book template](https:/
 
 > Instead of using pandoc html generation, it use [mdbook](https://github.com/rust-lang/mdBook) to generate nice html from markdown.
 
-I'm using this simple template to create ebooks and tutorials for [InaCode](https://inacode.id)
 
 ## Prerequisite
 
